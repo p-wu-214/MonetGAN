@@ -5,6 +5,8 @@ from dataset.monet_dataset import MonetDataset
 
 from model.dcgan_generator_model import DCGanGeneratorModel
 
+from model.dcgan_discriminator_model import DCGanDiscriminatorModel
+
 IMAGE_WIDTH = 256
 IMAGE_HEIGHT = 256
 
@@ -52,12 +54,16 @@ def main():
 
     dcg = DCGanGeneratorModel()
 
-    model = dcg.make_generator_model()
-    noise = tf.random.normal([1, 100])
-    generated_example = model(noise, training=False)
+    dcd = DCGanDiscriminatorModel()
 
-    plt.imshow(generated_example[0, :, :, 0])
-    plt.show()
+    generator = dcg.make_generator_model()
+    noise = tf.random.normal([1, 100])
+    generated_example = generator(noise, training=False)
+
+    discriminator = dcd.make_discriminator_model()
+    decision = discriminator(generated_example)
+
+    print(decision)
 
 
 
